@@ -1,4 +1,9 @@
-.wp-block-woocommerce-product-text-area-field {	
+.wp-block-woocommerce-product-text-area-field {
+	&__label_note {
+		margin-left: $gap-smallest;
+		color: $gray-700;
+	}
+
 	.rich-text {
 		width: 100%;
 		min-height: calc($gap-larger * 3);

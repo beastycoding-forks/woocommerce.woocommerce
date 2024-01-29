@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useWooBlockProps } from '@woocommerce/block-templates';
-import { createElement } from '@wordpress/element';
+import { createElement, createInterpolateElement } from '@wordpress/element';
 import { BaseControl } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { BlockControls, RichText } from '@wordpress/block-editor';
@@ -66,6 +66,22 @@ export function TextAreaBlockEdit( {
 		setAttributes( { direction: value } );
 	}
 
+	/*
+	 * Check if the label needs to be interpolated,
+	 * finding the `<note>...</note>` tag.
+	 */
+	let labelContent: string | JSX.Element = label || '';
+	const hasNote = label?.match( /<note>(.*)<\/note>/ );
+	if ( hasNote?.length && label ) {
+		labelContent = createInterpolateElement( label, {
+			note: (
+				<span className="wp-block-woocommerce-product-text-area-field__label_note">
+					{ hasNote[ 1 ] }
+				</span>
+			),
+		} );
+	}
+
 	const blockControlsProps = { group: 'block' };
 
 	return (
@@ -84,7 +100,7 @@ export function TextAreaBlockEdit( {
 
 			<BaseControl
 				id={ contentId.toString() }
-				label={ label }
+				label={ labelContent }
 				help={ help }
 			>
 				<div { ...blockProps }>
